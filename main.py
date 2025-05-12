@@ -9,10 +9,10 @@ def main():
     setup_airbnb_databases()  # This will create the databases and tables
     print("Setup complete.")
     
-    # # Step 2: Insert data for Athens
-    # print("Inserting data for Athens...")
-    # insert_data_for_area("airbnb_athens", "Athens(airbnb)")  # This will insert data into the Athens database
-    # print("Data for Athens inserted successfully.")
+    # Step 2: Insert data for Athens
+    print("Inserting data for Athens...")
+    insert_data_for_area("airbnb_athens", "Athens(airbnb)")  # This will insert data into the Athens database
+    print("Data for Athens inserted successfully.")
     
     # # Step 3: Insert data for Thessaloniki
     # print("Inserting data for Thessaloniki...")

@@ -26,8 +26,16 @@ def insert_data_for_area(db_name, area_name):
         print(f"Error: One or more CSV files are missing in {base_folder}")
         return
 
-    # Insert data into the 'listings' table
-    df_listings = pd.read_csv(listings_csv)
+    df_listings = pd.read_csv(
+    listings_csv,
+    quotechar='"',
+    escapechar='\\',
+    encoding='utf-8',
+    low_memory=False,
+    dtype=str,
+    keep_default_na=False,
+    on_bad_lines="skip")
+
     df_listings = df_listings.where(pd.notnull(df_listings), None)  # Handle NaN values
 
     listings_insert_query = """
@@ -76,8 +84,11 @@ def insert_data_for_area(db_name, area_name):
 
     # Insert data into the 'calendar' table
     df_calendar = pd.read_csv(calendar_csv)
-    df_calendar = df_calendar.where(pd.notnull(df_calendar), None)  # Handle NaN values
+    for col in ['price', 'adjusted_price']:
+        df_calendar[col] = df_calendar[col].replace(r'[\$,]', '', regex=True).astype(float)
 
+    df_calendar['adjusted_price']='None'
+    print(df_calendar.head().to_string)
     calendar_insert_query = """
         INSERT INTO calendar (
             listing_id, date, available, price, adjusted_price, minimum_nights, maximum_nights
@@ -120,8 +131,8 @@ def insert_data_for_area(db_name, area_name):
 
 # Call the function for both Athens and Thessaloniki
 def main():
-    insert_data_for_area("airbnb_athens", "athens")
-    insert_data_for_area("airbnb_thessaloniki", "thessaloniki")
+    insert_data_for_area("airbnb_athens", "athens(airbnb)")
+    insert_data_for_area("airbnb_thessaloniki", "thessaloniki(airbnb)")
 
 if __name__ == "__main__":
     main()
