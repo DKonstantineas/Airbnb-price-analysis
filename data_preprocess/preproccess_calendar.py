@@ -17,7 +17,6 @@ print(df.head(5))  # Sample 2 rows
 print(df['host_id'])
 df.to_csv(path_or_buf='Data\Athens(airbnb)\check.csv', sep=',')
 
-
 # # Load the CSV
 # df = pd.read_csv('Data/Athens(airbnb)/calendar.csv')
 
