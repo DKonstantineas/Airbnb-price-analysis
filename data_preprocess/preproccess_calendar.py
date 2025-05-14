@@ -1,20 +1,6 @@
 import pandas as pd
 import numpy as np
 
-# # Read the CSV file
-# df_calendar = pd.read_csv('Data/Athens(airbnb)/calendar.csv')
-
-# # Replace NaN values with None for MySQL compatibility
-# df_calendar = df_calendar.where(pd.notnull(df_calendar), None)
-
-# # Alternatively, use this approach to replace NaN with None:
-# # df_calendar = df_calendar.applymap(lambda x: None if pd.isna(x) else x)
-
-# # Check the DataFrame to ensure NaN values are now None
-# print(df_calendar.head())
-
-
-
 # Properly read complex CSV
 df = pd.read_csv(
     'Data/Athens(airbnb)/listings.csv',
