@@ -17,7 +17,7 @@ def insert_data_for_area(db_name, area_name):
     base_folder = f"data/{area_name}"  # Folder for the area (e.g., "athens" or "thessaloniki")
     
     # Define the full paths for each CSV file
-    listings_csv = os.path.join(base_folder, "listings.csv")
+    listings_csv = os.path.join(base_folder, "check.csv")
     calendar_csv = os.path.join(base_folder, "calendar.csv")
     reviews_csv = os.path.join(base_folder, "reviews.csv")
 
@@ -28,15 +28,10 @@ def insert_data_for_area(db_name, area_name):
 
     df_listings = pd.read_csv(
     listings_csv,
-    quotechar='"',
-    escapechar='\\',
-    encoding='utf-8',
-    low_memory=False,
-    dtype=str,
-    keep_default_na=False,
-    on_bad_lines="skip")
+     encoding='utf-8',        # Use 'utf-8-sig' if BOM errors happen
+)
 
-    df_listings = df_listings.where(pd.notnull(df_listings), None)  # Handle NaN values
+    #df_listings = df_listings.where(pd.notnull(df_listings), None)  # Handle NaN values
 
     listings_insert_query = """
         INSERT INTO listings (
@@ -76,6 +71,7 @@ def insert_data_for_area(db_name, area_name):
 
     for row in df_listings.itertuples(index=False, name=None):
         try:
+            print(row)
             cursor.execute(listings_insert_query, row)
         except mysql.connector.Error as e:
             print(f"Error inserting listing row: {e}")

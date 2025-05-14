@@ -15,32 +15,33 @@ import numpy as np
 
 
 
-# df_listings = pd.read_csv('Data/Athens(airbnb)/listings.csv')
-# print(df_listings.to_string().encode('utf-8').decode('utf-8'))
-# import pandas as pd
+# Properly read complex CSV
+df = pd.read_csv(
+    'Data/Athens(airbnb)/listings.csv',
+    encoding='utf-8'        # Use 'utf-8-sig' if BOM errors happe
+)
 
-# # Attempt to load the file with proper handling for complex CSVs
-# df = pd.read_csv(
-#     'Data/Athens(airbnb)/listings.csv',
-#     encoding='utf-8',                # or try 'utf-8-sig' or 'ISO-8859-1' if you get encoding errors
-#     quotechar='"',
-#     escapechar='\\',
-#     on_bad_lines='skip',             # or 'warn' to diagnose problematic rows
-#     engine='python'                  # better with complex CSVs than C engine
-# )
-# print(df)
+for col in df.columns:
+    df[col] = df[col].apply(lambda x: ' '.join(x.split()) if isinstance(x, str) else x)
 
 
-# Load the CSV
-df = pd.read_csv('Data/Athens(airbnb)/calendar.csv')
+# Print a summary, not full table
+#print(df.info())
+print(df.head(5))  # Sample 2 rows
+print(df['host_id'])
+df.to_csv(path_or_buf='Data\Athens(airbnb)\check.csv', sep=',')
 
-# Clean price columns (remove $ and convert to float)
-for col in ['price', 'adjusted_price']:
-    df[col] = df[col].replace(r'[\$,]', '', regex=True).astype(float)
 
-# Replace NaN with None for SQL compatibility
-df = df.where(pd.notnull(df), None)
+# # Load the CSV
+# df = pd.read_csv('Data/Athens(airbnb)/calendar.csv')
 
-df['adjusted_price']='None'
+# # Clean price columns (remove $ and convert to float)
+# for col in ['price', 'adjusted_price']:
+#     df[col] = df[col].replace(r'[\$,]', '', regex=True).astype(float)
 
-print(df.head().to_string())
+# # Replace NaN with None for SQL compatibility
+# df = df.where(pd.notnull(df), None)
+
+# df['adjusted_price']='None'
+
+# print(df.head().to_string())
